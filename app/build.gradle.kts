@@ -1,15 +1,12 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
     id("java")
     checkstyle
     application
+    jacoco
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.freefair.lombok") version "8.6"
     id("com.adarshr.test-logger") version "3.0.0"
     id("com.github.ben-manes.versions") version "0.50.0"
-    jacoco
 }
 
 application {
@@ -38,14 +35,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-    // https://technology.lastminute.com/junit5-kotlin-and-gradle-dsl/
-    testLogging {
-        exceptionFormat = TestExceptionFormat.FULL
-        events = mutableSetOf(TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED)
-        // showStackTraces = true
-        // showCauses = true
-        showStandardStreams = true
-    }
+    finalizedBy("jacocoTestReport")
 }
 
 tasks.jacocoTestReport { reports { xml.required.set(true) } }

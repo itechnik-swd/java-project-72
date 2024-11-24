@@ -2,12 +2,12 @@ package hexlet.code;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import hexlet.code.repository.BaseRepository;
-import io.javalin.Javalin;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
-import io.javalin.rendering.template.JavalinJte;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.repository.BaseRepository;
+import io.javalin.Javalin;
+import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -26,8 +26,9 @@ public class App {
         return jdbcUrl;
     }
 
-    private static String readResourceFile(String fileName) throws IOException {
-        var inputStream = App.class.getClassLoader().getResourceAsStream(fileName);
+    private static String readResourceFile() throws IOException {
+        var inputStream = App.class.getClassLoader().getResourceAsStream("schema.sql");
+        assert inputStream != null;
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             return reader.lines().collect(Collectors.joining("\n"));
         }
@@ -44,10 +45,11 @@ public class App {
         hikariConfig.setJdbcUrl(getDatabaseUrl());
 
         var dataSource = new HikariDataSource(hikariConfig);
-        String sql = readResourceFile("schema.sql");
+        String sql = readResourceFile();
 
         log.info(sql);
-        try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement()) {
             statement.execute(sql);
         }
         BaseRepository.dataSource = dataSource;
@@ -56,6 +58,9 @@ public class App {
             config.bundledPlugins.enableDevLogging();
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
+
+//        app.before(ctx -> {
+//            ctx.contentType("text/html; charset=utf-8");
 
         return app.get("/", ctx -> ctx.render("index.jte"));
     }
