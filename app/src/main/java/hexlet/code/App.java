@@ -5,7 +5,10 @@ import com.zaxxer.hikari.HikariDataSource;
 import gg.jte.ContentType;
 import gg.jte.TemplateEngine;
 import gg.jte.resolve.ResourceCodeResolver;
+import hexlet.code.controller.RootController;
+import hexlet.code.controller.UrlsController;
 import hexlet.code.repository.BaseRepository;
+import hexlet.code.util.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinJte;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +22,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class App {
+    private static final String IN_MEMORY_DB = "jdbc:h2:mem:project";
 
     private static String getDatabaseUrl() {
-        String jdbcUrl = System.getenv().getOrDefault("JDBC_DATABASE_URL", "jdbc:h2:mem:project");
+        String jdbcUrl = System.getenv().getOrDefault("JDBC_DATABASE_URL", IN_MEMORY_DB);
         log.info("jdbcUrl: {}", jdbcUrl);
         return jdbcUrl;
     }
@@ -59,10 +63,12 @@ public class App {
             config.fileRenderer(new JavalinJte(createTemplateEngine()));
         });
 
-//        app.before(ctx -> {
-//            ctx.contentType("text/html; charset=utf-8");
+        app.get(NamedRoutes.mainPath(), RootController::index);
+        app.post(NamedRoutes.urlsPath(), UrlsController::create);
+        app.get(NamedRoutes.urlsPath(), UrlsController::index);
+        app.get(NamedRoutes.urlPath("{id}"), UrlsController::show);
 
-        return app.get("/", ctx -> ctx.render("index.jte"));
+        return app;
     }
 
     private static int getPort() {
