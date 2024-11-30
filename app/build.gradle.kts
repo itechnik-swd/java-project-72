@@ -29,13 +29,20 @@ dependencies {
     implementation("com.h2database:h2:2.2.224")
     implementation("com.zaxxer:HikariCP:5.1.0")
 
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
+
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    testImplementation("io.javalin:javalin-bundle:6.3.0")
+    testImplementation("org.assertj:assertj-core:3.26.3")
+    // библиотека для имитации объектов Javalin Context
+    testImplementation("org.mockito:mockito-core:5.11.0")
 }
 
 tasks.test {
     useJUnitPlatform()
-    finalizedBy("jacocoTestReport")
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport { reports { xml.required.set(true) } }
