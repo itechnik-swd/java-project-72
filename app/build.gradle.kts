@@ -31,13 +31,16 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 
+    implementation("com.konghq:unirest-java-core:4.4.4")
+    implementation("org.jsoup:jsoup:1.18.1")
+
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     testImplementation("io.javalin:javalin-bundle:6.3.0")
     testImplementation("org.assertj:assertj-core:3.26.3")
-    // библиотека для имитации объектов Javalin Context
-    testImplementation("org.mockito:mockito-core:5.11.0")
+
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
 
 tasks.test {
