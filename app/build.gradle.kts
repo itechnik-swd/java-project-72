@@ -24,22 +24,17 @@ dependencies {
     implementation("io.javalin:javalin:6.3.0")
     implementation("org.slf4j:slf4j-simple:2.0.13")
     implementation("io.javalin:javalin-rendering:6.1.6")
-    implementation("gg.jte:jte:3.1.12")
-
+    implementation("gg.jte:jte:2.3.2")
     implementation("com.h2database:h2:2.2.224")
     implementation("com.zaxxer:HikariCP:5.1.0")
-
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
-
     implementation("com.konghq:unirest-java-core:4.4.4")
     implementation("org.jsoup:jsoup:1.18.1")
 
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-
     testImplementation("io.javalin:javalin-bundle:6.3.0")
     testImplementation("org.assertj:assertj-core:3.26.3")
-
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
 }
 
