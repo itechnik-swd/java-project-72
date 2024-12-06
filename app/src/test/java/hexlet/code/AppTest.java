@@ -116,7 +116,7 @@ class AppTest {
             Url mockUrl = new Url(urlName);
             UrlRepository.save(mockUrl);
 
-            try (var response = client.post(NamedRoutes.urlChecksPath(String.valueOf(mockUrl.getId())))) {
+            try (var response = client.post(NamedRoutes.urlChecksPath(mockUrl.getId()))) {
                 assertThat(response.code()).isEqualTo(200);
 
                 List<UrlCheck> urlChecks = UrlChecksRepository.getAllChecksForUrl(mockUrl.getId());
@@ -126,11 +126,9 @@ class AppTest {
                 assertThat(lastUrlCheck.getUrlId()).isEqualTo(1);
                 assertThat(lastUrlCheck.getStatusCode()).isEqualTo(200);
                 assertThat(lastUrlCheck.getCreatedAt()).isToday();
-                assertThat(lastUrlCheck.getTitle()).contains("HTML test page");
-                assertThat(lastUrlCheck.getH1()).contains("The best test page for all possible scenarios");
-                assertThat(lastUrlCheck.getDescription()).contains("Discover this test HTML page tailored for web "
-                        + "applications testing. Featuring headers, paragraphs, title and meta data, ideal for "
-                        + "evaluating functionality.");
+                assertThat(lastUrlCheck.getTitle()).contains("title");
+                assertThat(lastUrlCheck.getH1()).contains("Level 1 header");
+                assertThat(lastUrlCheck.getDescription()).contains("some description");
             }
         });
     }
