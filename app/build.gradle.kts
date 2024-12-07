@@ -30,6 +30,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
     implementation("com.konghq:unirest-java-core:4.4.4")
     implementation("org.jsoup:jsoup:1.18.1")
+    implementation("org.postgresql:postgresql:42.7.3")
 
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
