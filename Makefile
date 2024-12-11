@@ -30,5 +30,3 @@ check-deps:
 
 build-run:
 	make -C app build-run
-
-.PHONY: build

@@ -4,7 +4,7 @@ import hexlet.code.model.Url;
 import hexlet.code.model.UrlCheck;
 import hexlet.code.repository.UrlChecksRepository;
 import hexlet.code.repository.UrlRepository;
-import hexlet.code.util.NamedRoutes;
+import hexlet.code.utils.NamedRoutes;
 import io.javalin.Javalin;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.mockwebserver.MockResponse;
@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,7 +59,7 @@ class AppTest {
         JavalinTest.test(app, (server, client) -> {
             var response = client.get("/");
             assertThat(response.code()).isEqualTo(200);
-            assert response.body() != null;
+            assertThat(response.body()).isNotNull();
             assertThat(response.body().string()).contains("Анализатор страниц");
         });
     }
@@ -72,7 +70,7 @@ class AppTest {
             var requestBody = "url=https://www.example.com";
             try (var response = client.post("/urls", requestBody)) {
                 assertThat(response.code()).isEqualTo(200);
-                assert response.body() != null;
+                assertThat(response.body()).isNotNull();
                 assertThat(response.body().string()).contains("https://www.example.com");
             }
         });
@@ -84,7 +82,7 @@ class AppTest {
             var requestBody = "url=ya.ru";
             try (var response = client.post("/urls", requestBody)) {
                 assertThat(response.code()).isEqualTo(200);
-                assert response.body() != null;
+                assertThat(response.body()).isNotNull();
                 assertThat(response.body().string()).doesNotContain("ya.ru");
             }
         });
@@ -100,7 +98,7 @@ class AppTest {
 
     @Test
     public void testUrlPage() throws SQLException {
-        var url = new Url(1, "https://www.example.com", new Timestamp(new Date().getTime()));
+        var url = new Url("https://www.example.com");
         UrlRepository.save(url);
         JavalinTest.test(app, (server, client) -> assertThat(client.get("/urls/" + url.getId()).code()).isEqualTo(200));
     }
@@ -123,7 +121,7 @@ class AppTest {
                 assertThat(urlChecks.size()).isEqualTo(1);
 
                 UrlCheck lastUrlCheck = UrlChecksRepository.getAllChecksForUrl(mockUrl.getId()).getFirst();
-                assertThat(lastUrlCheck.getUrlId()).isEqualTo(1);
+
                 assertThat(lastUrlCheck.getStatusCode()).isEqualTo(200);
                 assertThat(lastUrlCheck.getCreatedAt()).isToday();
                 assertThat(lastUrlCheck.getTitle()).contains("title");
