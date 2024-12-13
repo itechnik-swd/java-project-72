@@ -34,7 +34,10 @@ public class UrlRepository extends BaseRepository {
 
     public static Url getUrlFromResultSet(ResultSet resultSet) throws SQLException {
         String name = resultSet.getString("name");
-        return new Url(name);
+        var createdAt = resultSet.getTimestamp("created_at");
+        Url url = new Url(name);
+        url.setCreatedAt(createdAt.toLocalDateTime());
+        return url;
     }
 
     public static List<Url> getEntities() throws SQLException {

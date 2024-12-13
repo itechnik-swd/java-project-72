@@ -100,7 +100,12 @@ class AppTest {
     public void testUrlPage() throws SQLException {
         var url = new Url("https://www.example.com");
         UrlRepository.save(url);
-        JavalinTest.test(app, (server, client) -> assertThat(client.get("/urls/" + url.getId()).code()).isEqualTo(200));
+
+        JavalinTest.test(app, (server, client) -> {
+            try (var response = client.get("/urls/" + url.getId())) {
+                assertThat(response.code()).isEqualTo(200);
+            }
+        });
     }
 
     @Test
